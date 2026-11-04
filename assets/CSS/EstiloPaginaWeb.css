@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ba86eb; /*Fondo de donde aparece Inicio,Productos, Nosotros,Contactos*/
+    background-color: #ba86eb; /*Fondo de donde aparece Inicio,Productos, Nosotros,Contactos etc*/
     padding: 1rem 5%;
     box-shadow: 0 2px 10px rgba(241, 8, 183, 0.05);
     position: sticky;
