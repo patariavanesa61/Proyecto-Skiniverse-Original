@@ -4,47 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel General de Productos - Skiniverse</title>
-    <!-- Enlace al archivo CSS dentro de la carpeta assets/CSS -->
     <link rel="stylesheet" href="../assets/CSS/EstiloAdmin.css">
 </head>
 <body>
 
-    <!-- Barra de Navegación Superior -->
     <header class="navbar">
-        <div class="nav-brand">
-            <span>💧</span> Skiniverse
-        </div>
+        <div class="nav-brand" style="cursor: pointer;" onclick="irInicio()"><span>💧</span> Skiniverse</div>
         <ul class="nav-links">
-            <li><a href="PaginaPrincipal.html">Inicio</a></li>
-            <li><a href="#">Catálogo</a></li>
-            <li><a href="#">Privacidad</a></li>
+            <li><a href="#" onclick="irInicio()">Inicio</a></li>
+            <li><a href="#" onclick="irCatalogo()">Catálogo</a></li>
+            <li><a href="#" onclick="irPrivacidad()">Privacidad</a></li>
             <li><a href="#" style="font-weight: bold;">Administrar ▼</a></li>
-            <li><a href="#" class="cart-icon">🛒 0</a></li>
-            <li><button class="btn-logout">Cerrar Sesión</button></li>
+            <li><button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button></li>
         </ul>
     </header>
 
-    <!-- Contenido Principal -->
     <main class="main-container">
-        
-        <!-- Encabezado del Panel -->
         <div class="admin-header">
             <h1>Panel General de Productos</h1>
             <div class="admin-actions">
-                <button class="btn-action">📦 Pedidos</button>
-                <button class="btn-action">👥 Usuarios</button>
-                <button class="btn-action btn-primary-custom">+ Agregar Nuevo Producto ▼</button>
+                <button type="button" class="btn-action" onclick="verPedidos()">📦 Pedidos</button>
+                <button type="button" class="btn-action" onclick="verUsuarios()">👥 Usuarios</button>
+                <button type="button" class="btn-action btn-primary-custom" onclick="location.href='FormularioProducto.html'">+ Agregar Nuevo Producto ▼</button>
             </div>
         </div>
 
-        <!-- Pestañas de Filtros -->
         <div class="filter-tabs">
-            <button class="tab active">📌 Todos</button>
-            <button class="tab">🧴 Productos Propios</button>
-            <button class="tab">🏷️ Marcas Externas</button>
+            <button type="button" class="tab active" onclick="filtrar('todos', this)">📌 Todos</button>
+            <button type="button" class="tab" onclick="filtrar('propios', this)">🧴 Productos por  Categoria </button>
         </div>
 
-        <!-- Tabla de Datos -->
         <div class="table-container">
             <table class="product-table">
                 <thead>
@@ -58,29 +47,85 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <!-- Aquí puedes apuntar a tus imágenes de productos -->
-                            <img src="https://via.placeholder.com/35" alt="Limpiador" class="product-img">
-                        </td>
-                        <td>Limpiadores de espuma</td>
-                        <td>Limpiadores</td>
-                        <td>Todo tipo de piel</td>
-                        <td>$30.000</td>
-                        <td><span class="stock-badge">51 unidades</span></td>
-                        <td>
-                            <button class="btn-edit">✏️ Editar</button>
-                            <button class="btn-view">👁️ Ver</button>
-                            <button class="btn-delete">🗑️ Borrar</button>
-                        </td>
-                    </tr>
-                    <!-- Puedes duplicar más filas <tr> según necesites -->
+                <tbody id="tbodyProductos">
+                    <!-- Dinámico -->
                 </tbody>
             </table>
         </div>
-
     </main>
 
+    <script>
+        let filtroActual = 'todos';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Inicializar datos por defecto si está vacío el localStorage
+            if (!localStorage.getItem('skiniverse_productos')) {
+                const productosIniciales = [
+                    { id: 1, imagen: 'https://via.placeholder.com/35', nombre: 'Limpiadores de espuma', categoria: 'Limpiadores', tipoPiel: 'Todo tipo de piel', precio: 36.95, stock: 51, tipo: 'propios' },
+                    { id: 2, imagen: 'https://via.placeholder.com/35', nombre: 'Sérum de Ácido Hialurónico', categoria: 'Tratamientos', tipoPiel: 'Seca / Mixta', precio: 45.00, stock: 12, tipo: 'externos' }
+                ];
+                localStorage.setItem('skiniverse_productos', JSON.stringify(productosIniciales));
+            }
+            renderizarTabla();
+        });
+
+        function renderizarTabla() {
+            const tbody = document.getElementById('tbodyProductos');
+            tbody.innerHTML = '';
+
+            let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+            const filtrados = productos.filter(p => filtroActual === 'todos' || p.tipo === filtroActual);
+
+            if (filtrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">No hay productos en esta categoría.</td></tr>`;
+                return;
+            }
+
+            filtrados.forEach(p => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${p.imagen}" width="35" style="border-radius:4px; object-fit:cover;" alt="Img"></td>
+                        <td><strong>${p.nombre}</strong></td>
+                        <td>${p.categoria}</td>
+                        <td>${p.tipoPiel}</td>
+                        <td>$${Number(p.precio).toFixed(2)}</td>
+                        <td><span style="background:#10b981; color:white; padding:3px 8px; border-radius:10px; font-size:12px;">${p.stock} unidades</span></td>
+                        <td>
+                            <button type="button" onclick="location.href='FormularioProducto.html?id=${p.id}'" style="padding:4px 8px; background:#f1f5f9; border:1px solid #cbd5e1; cursor:pointer; border-radius:4px;">✏️ Editar</button>
+                            <button type="button" onclick="location.href='DetalleProducto.html?id=${p.id}'" style="padding:4px 8px; background:#e0f2fe; border:1px solid #bae6fd; cursor:pointer; border-radius:4px;">👁️ Ver</button>
+                            <button type="button" onclick="borrar(${p.id})" style="padding:4px 8px; background:#fee2e2; border:1px solid #fecaca; cursor:pointer; border-radius:4px;">🗑️ Borrar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function filtrar(tipo, elemento) {
+            filtroActual = tipo;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            elemento.classList.add('active');
+            renderizarTabla();
+        }
+
+        function borrar(id) {
+            if (confirm('¿Deseas eliminar este producto?')) {
+                let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+                productos = productos.filter(x => x.id !== id);
+                localStorage.setItem('skiniverse_productos', JSON.stringify(productos));
+                renderizarTabla();
+            }
+        }
+
+        function irInicio() { window.location.href = "PaginaPrincipal.html"; }
+        function irCatalogo() { alert("Redirigiendo a Catálogo..."); }
+        function irPrivacidad() { alert("Mostrando Políticas de Privacidad."); }
+        function verPedidos() { window.location.href = "AdminPedidos.html"; }
+        function verUsuarios() { window.location.href = "AdminUsuarios.html"; }
+        function cerrarSesion() {
+            if (confirm("¿Cerrar sesión?")) {
+                window.location.href = "Login.html";
+            }
+        }
+    </script>
 </body>
 </html>

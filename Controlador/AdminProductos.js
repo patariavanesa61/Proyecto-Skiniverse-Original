@@ -1,7 +1,7 @@
 // Estado inicial de la aplicación y datos simulados
 let productos = [
-    { id: 1, imagen: 'https://via.placeholder.com/35', nombre: 'Limpiadores de espuma', categoria: 'Limpiadores', tipoPiel: 'Todo tipo de piel', precio: 36.95, stock: 51, tipo: 'propios' },
-    { id: 2, imagen: 'https://via.placeholder.com/35', nombre: 'Sérum de Ácido Hialurónico', categoria: 'Tratamientos', tipoPiel: 'Seca / Mixta', precio: 45.00, stock: 12, tipo: 'externos' }
+    { id: 1, imagen: 'https://via.placeholder.com/35', nombre: 'Limpiadores de espuma', categoria: 'Limpiadores', tipoPiel: 'Todo tipo de piel', precio: 30000, stock: 51, tipo: 'propios' },
+    { id: 2, imagen: 'https://via.placeholder.com/35', nombre: 'Sérum de Ácido Hialurónico', categoria: 'Tratamientos', tipoPiel: 'Seca / Mixta', precio: 45000, stock: 12, tipo: 'externos' }
 ];
 
 let filtroActual = 'todos';
@@ -20,12 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Control del formulario de productos (Crear / Editar)
-    document.getElementById('formProducto').addEventListener('submit', guardarProducto);
+    const formProducto = document.getElementById('formProducto');
+    if (formProducto) {
+        formProducto.addEventListener('submit', guardarProducto);
+    }
 });
 
 // --- RENDERIZADO DE TABLA ---
 function renderizarTabla() {
     const tbody = document.getElementById('tbodyProductos');
+    if (!tbody) return;
     tbody.innerHTML = '';
 
     const productosFiltrados = productos.filter(p => {
@@ -45,7 +49,7 @@ function renderizarTabla() {
             <td><strong>${p.nombre}</strong></td>
             <td>${p.categoria}</td>
             <td>${p.tipoPiel}</td>
-            <td>$${Number(p.precio).toFixed(2)}</td>
+            <td>$${Number(p.precio).toLocaleString()}</td>
             <td><span class="stock-badge">${p.stock} unidades</span></td>
             <td>
                 <button class="btn-edit" onclick="abrirModalEditar(${p.id})">✏️ Editar</button>
@@ -59,7 +63,8 @@ function renderizarTabla() {
 
 // --- GESTIÓN DE MODALES DE PRODUCTOS ---
 function abrirModalCrear() {
-    document.getElementById('formProducto').reset();
+    const form = document.getElementById('formProducto');
+    if (form) form.reset();
     document.getElementById('productoId').value = '';
     document.getElementById('modalTitulo').innerText = 'Agregar Nuevo Producto';
     document.getElementById('modalFormulario').style.display = 'flex';
@@ -107,12 +112,6 @@ function guardarProducto(e) {
     renderizarTabla();
 }
 
-function verProducto(id) {
-    const p = productos.find(prod => prod.id === id);
-    if (!p) return;
-    alert(`🔍 DETALLES DE SKU:\n\n• ID: ${p.id}\n• Nombre: ${p.nombre}\n• Categoría: ${p.categoria}\n• Tipo de Piel: ${p.tipoPiel}\n• Precio: $${p.precio}\n• Stock: ${p.stock} unidades\n• Clasificación: ${p.tipo.toUpperCase()}`);
-}
-
 function eliminarProducto(id) {
     if (confirm('¿Estás seguro de eliminar este producto del inventario?')) {
         productos = productos.filter(p => p.id !== id);
@@ -124,33 +123,29 @@ function cerrarModal(idModal) {
     document.getElementById(idModal).style.display = 'none';
 }
 
-// --- BOTONES FUNCIONALES DE LA BARRA SUPERIOR Y ACCESOS RÁPIDOS ---
+// --- BOTONES FUNCIONALES CON REDIRECCIÓN A PÁGINAS APARTE ---
 function irInicio() {
     window.location.href = "PaginaPrincipal.html";
 }
 
 function irCatalogo() {
-    alert("Redirigiendo al Catálogo público de Skiniverse...");
+    window.location.href = "PaginaPrincipal.html"; // O tu página de catálogo si la tienes separada
 }
 
 function irPrivacidad() {
-    alert("Abriendo políticas de Privacidad y Términos de uso...");
-}
-
-function toggleMenuAdmin() {
-    alert("Opciones de Administrador activas (Panel de control actual).");
-}
-
-function abrirCarrito() {
-    alert("🛒 Tu carrito de compras de prueba está actualmente vacío (0 artículos).");
+    alert("Políticas de Privacidad y Términos de Uso de Skiniverse: Tu Piel, Tu Propio Universo.");
 }
 
 function verPedidos() {
-    alert("📦 Abriendo módulo de gestión de Pedidos de clientes...");
+    window.location.href = "AdminPedidos.html";
 }
 
 function verUsuarios() {
-    alert("👥 Abriendo panel de control y permisos de Usuarios...");
+    window.location.href = "AdminUsuarios.html";
+}
+
+function verProducto(id) {
+    window.location.href = `DetalleProducto.html?id=${id}`;
 }
 
 function cerrarSesion() {

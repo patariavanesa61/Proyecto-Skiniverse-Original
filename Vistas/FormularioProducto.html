@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Producto - Skiniverse</title>
+    <link rel="stylesheet" href="../assets/CSS/EstiloAdmin.css">
+    <style>
+        .form-container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .form-header {
+            background-color: #0284c7;
+            color: white;
+            padding: 18px 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .form-body {
+            padding: 30px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group-full {
+            margin-bottom: 20px;
+        }
+        .form-group-full label, .form-group-full input, .form-group-full select, .form-group-full textarea {
+            display: block;
+            width: 100%;
+        }
+        .form-group-full label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .form-group-full input, .form-group-full select, .form-group-full textarea {
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+        .form-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        .btn-cancelar {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-brand" style="cursor: pointer;" onclick="location.href='AdminProductos.html'"><span>💧</span> Skiniverse</div>
+        <ul class="nav-links">
+            <li><a href="AdminProductos.html">📦 Volver al Panel</a></li>
+            <li><button class="btn-logout" onclick="location.href='Login.html'">Cerrar Sesión</button></li>
+        </ul>
+    </header>
+
+    <main class="main-container">
+        <div class="form-container">
+            <div class="form-header" id="tituloEncabezado">
+                ✏️ Editar Producto
+            </div>
+            
+            <form class="form-body" id="formGestion" onsubmit="guardarDatos(event)">
+                <input type="hidden" id="prodId">
+
+                <div class="form-group-full">
+                    <label>Nombre del Producto</label>
+                    <input type="text" id="txtNombre" required placeholder="Ej. Limpiadores de espuma">
+                </div>
+
+                <div class="form-group-full">
+                    <label>Categoría</label>
+                    <input type="text" id="txtCategoria" required placeholder="Ej. Limpiadores">
+                </div>
+
+                <div class="form-group-full">
+                    <label>Tipo de Piel Recomendado</label>
+                    <input type="text" id="txtTipoPiel" required placeholder="Ej. Todo tipo de piel">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group-full">
+                        <label>Precio ($)</label>
+                        <input type="number" step="0.01" id="txtPrecio" required placeholder="36.95">
+                    </div>
+                    <div class="form-group-full">
+                        <label>Stock (Unidades)</label>
+                        <input type="number" id="txtStock" required placeholder="51">
+                    </div>
+                </div>
+
+                <div class="form-group-full">
+                    <label>URL de la Imagen</label>
+                    <input type="text" id="txtImagen" placeholder="https://via.placeholder.com/35">
+                </div>
+
+        
+
+                <div class="form-footer">
+                    <a href="AdminProductos.html" class="btn-cancelar">Cancelar</a>
+                    <button type="submit" class="btn-action btn-primary-custom" style="padding: 10px 22px; cursor: pointer;">💾 Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            if (id) {
+                document.getElementById("tituloEncabezado").innerText = "✏️ Editar Producto";
+                let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+                let prod = productos.find(p => p.id == id);
+                
+                if (prod) {
+                    document.getElementById("prodId").value = prod.id;
+                    document.getElementById("txtNombre").value = prod.nombre;
+                    document.getElementById("txtCategoria").value = prod.categoria;
+                    document.getElementById("txtTipoPiel").value = prod.tipoPiel;
+                    document.getElementById("txtPrecio").value = prod.precio;
+                    document.getElementById("txtStock").value = prod.stock;
+                    document.getElementById("txtImagen").value = prod.imagen;
+                
+                }
+            } else {
+                document.getElementById("tituloEncabezado").innerText = "➕ Agregar Nuevo Producto";
+            }
+        });
+
+        function guardarDatos(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById("prodId").value;
+            const nombre = document.getElementById("txtNombre").value;
+            const categoria = document.getElementById("txtCategoria").value;
+            const tipoPiel = document.getElementById("txtTipoPiel").value;
+            const precio = parseFloat(document.getElementById("txtPrecio").value);
+            const stock = parseInt(document.getElementById("txtStock").value);
+            let imagen = document.getElementById("txtImagen").value.trim();
+            if (!imagen) imagen = 'https://via.placeholder.com/35';
+            
+            const esExterno = document.getElementById("chkMarcaExterna").checked;
+            const tipo = esExterno ? 'externos' : 'propios';
+
+            let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+
+            if (id) {
+                // Editar existente
+                let index = productos.findIndex(p => p.id == id);
+                if (index !== -1) {
+                    productos[index] = { id: parseInt(id), nombre, categoria, tipoPiel, precio, stock, imagen, tipo };
+                }
+            } else {
+                // Crear nuevo
+                let nuevoProd = {
+                    id: Date.now(),
+                    nombre,
+                    categoria,
+                    tipoPiel,
+                    precio,
+                    stock,
+                    imagen,
+                    tipo
+                };
+                productos.push(nuevoProd);
+            }
+
+            localStorage.setItem('skiniverse_productos', JSON.stringify(productos));
+            alert("¡Producto guardado exitosamente!");
+            window.location.href = "AdminProductos.html";
+        }
+    </script>
+</body>
+</html>
