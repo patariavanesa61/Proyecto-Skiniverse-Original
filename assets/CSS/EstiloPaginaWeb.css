@@ -15,7 +15,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0d5f8a;
+    background-color: #6d3c11;
     padding: 15px 40px;
     position: sticky;
     top: 0;
@@ -103,7 +103,7 @@ body {
 
 .badge-novedad {
     background: white;
-    color: #0d5f8a;
+    color: #0d5f8a; /* Color del texto de la etiqueta*/
     padding: 6px 14px;
     border-radius: 15px;
     font-size: 13px;
@@ -304,4 +304,21 @@ footer {
     text-align: center;
     padding: 20px;
     font-size: 14px;
+}
+
+.card-container{
+   display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.section-header {
+    background: #E5F9E4;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
