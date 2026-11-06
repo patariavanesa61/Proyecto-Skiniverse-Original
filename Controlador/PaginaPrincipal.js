@@ -1,39 +1,50 @@
-document.addEventListener("DOMContentLoaded", () => {
-    
-    let contadorCarrito = 0;
-    const cartCountElement = document.getElementById("cart-count");
-    const botonesComprar = document.querySelectorAll(".btn-comprar");
+document.addEventListener('DOMContentLoaded', () => {
+    // --- LÓGICA DEL CARRUSEL ---
+    const track = document.getElementById('carouselTrack');
+    const slides = Array.from(track.children);
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const dotsNav = document.getElementById('carouselDots');
+    const dots = Array.from(dotsNav.children);
 
-    botonesComprar.forEach(boton => {
-        boton.addEventListener("click", (e) => {
-            // Incrementar contador
-            contadorCarrito++;
-            cartCountElement.textContent = contadorCarrito;
+    let currentIndex = 0;
 
-            const tarjeta = e.target.parentElement;
-            const nombreProducto = tarjeta.querySelector("h3").textContent;
+    const updateCarousel = (index) => {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[index].classList.add('active');
+    };
 
-            alert(`¡"${nombreProducto}" se ha añadido al carrito! 🌿`);
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel(currentIndex);
+    });
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateCarousel(currentIndex);
+    });
+
+    dotsNav.addEventListener('click', (e) => {
+        const targetDot = e.target.closest('.dot');
+        if (!targetDot) return;
+        currentIndex = parseInt(targetDot.dataset.index);
+        updateCarousel(currentIndex);
+    });
+
+    // Autoplay cada 5 segundos
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel(currentIndex);
+    }, 5000);
+
+    // --- FORMULARIO BOLETÍN ---
+    const form = id = document.getElementById('newsletterForm');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('¡Gracias por suscribirte a Skiniverse!');
+            form.reset();
         });
-    });
-
-    const formulario = document.querySelector(".formulario");
-
-    formulario.addEventListener("submit", (e) => {
-        // Prevenir que la página se recargue al enviar el formulario
-        e.preventDefault();
-
-        // Capturar los valores de los inputs
-        const inputs = formulario.querySelectorAll("input");
-        const nombre = inputs[0].value.trim();
-        const email = inputs[1].value.trim();
-
-        if (nombre && email) {
-
-            alert(`¡Gracias por unirte a Skiniverse, ${nombre}! 💖\nHemos enviado tu cupón del 10% de descuento a: ${email}`);
-            
-            formulario.reset();
-        }
-    });
-
+    }
 });

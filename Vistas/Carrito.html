@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras con JavaScript</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .productos, .carrito { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+    .producto-item { margin-bottom: 10px; }
+    button { cursor: pointer; padding: 5px 10px; }
+    .lista-carrito { list-style: none; padding: 0; }
+    .lista-carrito li { margin-bottom: 5px; display: flex; justify-content: space-between; max-width: 350px; }
+  </style>
+</head>
+<body>
+
+  <h1>Mi Tienda Online</h1>
+
+  <!-- Lista de Productos Disponibles -->
+  <div class="productos">
+    <h2>Productos</h2>
+    <div class="producto-item">
+      <span>Camiseta - $20.000 COP</span>
+      <button onclick="agregarAlCarrito(1, 'Camiseta', 20000)">Agregar</button>
+    </div>
+    <div class="producto-item">
+      <span>Gorra - $15.000 COP</span>
+      <button onclick="agregarAlCarrito(2, 'Gorra', 15000)">Agregar</button>
+    </div>
+    <div class="producto-item">
+      <span>Pantalón - $50.000 COP</span>
+      <button onclick="agregarAlCarrito(3, 'Pantalón', 50000)">Agregar</button>
+    </div>
+  </div>
+
+  <!-- Carrito de Compras -->
+  <div class="carrito">
+    <h2>Carrito de Compras</h2>
+    <ul id="lista-carrito" class="lista-carrito"></ul>
+    <h3>Total: $<span id="total-carrito">0</span> COP</h3>
+    <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+  </div>
+
+  <script src="Carrito.js"></script>
+</body>
+</html>

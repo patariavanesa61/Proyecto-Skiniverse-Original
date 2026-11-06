@@ -1,41 +1,98 @@
 <!DOCTYPE html>
-<htlm lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, inicial-scale=1.0">
-        <tittle>Skiniverse - Cuidado de la Piel </tittle>
-        <link rel="stylesheet" href="../assets/CSS/EstiloPaginaWeb.css">
-    </head>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skiniverse - Cuidado de la Piel</title>
+    <link rel="stylesheet" href="../assets/CSS/EstiloPaginaWeb.css">
+</head>
 <body>
+    <!-- Barra de Navegación -->
     <header class="navbar">
-        <div class="logo">Skiniverse</div>
+        <div class="logo">
+            <span class="logo-icon">💧</span> Skiniverse
+        </div>
         <nav>
             <ul>
-                <li><a href="Inicio">Inicio</a></li>
-                <li><a href="Productos">Productos</a></li>
-                <li><a href="Nosotros">Nosotros</a></li>
-                <li><a href="Contactos">Contactos</a></li>
-                <li class="cart-icon">🛒 <span id="cart-count">0</span></li>
+                <li><a href="PaginaPrincipal.html" class="active">Inicio</a></li>
+                <li><a href="#Productos">Catálogo</a></li>
+                <li><a href="Privacidad.html">Privacidad</a></li>
+                <li><a href="Registro.html" class="btn-register">Registrarse</a></li>
+                <li><a href="Login.html" class="btn-login">Iniciar Sesión</a></li>
             </ul>
         </nav>
     </header>
-    <section id="inicio" class="hero">
-        <div class="hero-content">
-            <h1>Descubre el universo para tu piel</h1>
-            <p>Fórmulas dermatológicas y naturales diseñadas para darle a tu rostro el brillo que merece.</p>
-            <a href="Productos" class="btn">Ver Catálogo</a>
+
+    <!-- Carrusel Banner Principal -->s
+    <section class="carousel-container" data-bs-interval="5000">
+        <div class="carousel-track" id="carouselTrack">
+
+            <div class="carousel-slide active">
+                <div class="hero-content">
+                    <span class="badge-novedad">✨ Novedad de Temporada</span>
+                    <h1>Piel Radiante & Saludable</h1>
+                    <p>Descubre nuestra selección exclusiva de tónicos, esencias y sérums diseñados para darle a tu rostro el brillo que merece.</p>
+                    <a href="#Productos" class="btn">Explorar Catálogo &rarr;</a>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=80" alt="Cuidado Facial">
+                </div>
+            </div>
+
+            <div class="carousel-slide" data-bs-interval="5000">
+                <div class="hero-content">
+                    <span class="badge-novedad">🌿 100% Orgánico</span>
+                    <h1>Hidratación Profunda 24h</h1>
+                    <p>Fórmulas botánicas puras que restauran y protegen la barrera cutánea sin irritar.</p>
+                    <a href="#Productos" class="btn">Ver Productos &rarr;</a>
+                </div>
+                <div class="hero-image">
+                    <img src="https://static.vecteezy.com/system/resources/previews/057/639/867/non_2x/a-man-and-woman-are-smiling-while-using-facial-products-couple-skincare-routine-photo.jpeg" alt="Productos Naturales">
+                </div>
+            </div>
+
+            <div class="carousel-slide" data-bs-interval="5000">
+                <div class="hero-content">
+                    <span class="badge-novedad">☀️ Protección Solar</span>
+                    <h1>Acabado Invisible & Toque Seco</h1>
+                    <p>Protege tu piel contra los rayos UVA/UVB con nuestra tecnología de rápida absorción.</p>
+                    <a href="#Productos" class="btn">Comprar Ahora &rarr;</a>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=80" alt="Protector Solar">
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles del Carrusel -->
+        <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
+        <button class="carousel-btn next" id="nextBtn">&#10095;</button>
+
+        <!-- Indicadores -->
+        <div class="carousel-dots" id="carouselDots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
         </div>
     </section>
-    <section id="Productos" class="Productos-section">
-        <h2>Nuestros Productos Estrella</h2>
-        <div class="card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStajLCJL-Pj997sAt-cUgCI7-AYC1cHA-A9Byq2njAqg&s=10" alt="Serum Hidratante">
-            <h3>Sérum Ácido Hialurónico</h3>
-            <p>Hidratación profunda por 24 horas y reducción de líneas de expresión</p>
-            <span class="precio">$25.000</span>
-            <button class="btn-comprar">Añadir al Carrito</button>
+
+    <!-- Sección de Productos / Categorías -->
+    <section id="Productos" class="productos-section">
+        <div class="section-header">
+            <h2>Encuentra por Categoría</h2>
+            <p class="section-subtitle">Explora nuestros productos según las necesidades reales de tu piel</p>
         </div>
-        <div class="card">
+        
+        <div class="cards-container">
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStajLCJL-Pj997sAt-cUgCI7-AYC1cHA-A9Byq2njAqg&s=10" alt="Serum Hidratante">
+                <h3>Sérum Ácido Hialurónico</h3>
+                <p>Hidratación profunda por 24 horas y reducción de líneas de expresión.</p>
+                <span class="precio">$25.000</span>
+                <button class="btn-comprar">Añadir al Carrito</button>
+            </div>
+            
+            <div class="card">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0uBwaTtA-fp1yTH7agWTRWeI5JtTPfUYTRzJWC3iohA&s=10" alt="Limpiador Facial">
                 <h3>Limpiador Gel Botánico</h3>
                 <p>Limpia suavemente los poros sin resecar ni alterar la barrera cutánea.</p>
@@ -52,10 +109,12 @@
             </div>
         </div>
     </section>
+
+    <!-- Sección Contacto -->
     <section id="contacto" class="contacto-section">
         <h2>Únete a la Comunidad Skiniverse</h2>
         <p>Recibe consejos personalizados y un 10% de descuento en tu primera compra.</p>
-        <form class="formulario">
+        <form class="formulario" id="newsletterForm">
             <input type="text" placeholder="Tu nombre" required>
             <input type="email" placeholder="Tu correo electrónico" required>
             <button type="submit" class="btn">Suscribirme</button>
@@ -66,6 +125,6 @@
         <p>&copy; 2026 Skiniverse. Todos los derechos reservados.</p>
     </footer>
 
-     <script src="../Controlador/PaginaPrincipal.js"></script>
+    <script src="../Controlador/PaginaPrincipal.js"></script>
 </body>
-</htlm>
+</html>
