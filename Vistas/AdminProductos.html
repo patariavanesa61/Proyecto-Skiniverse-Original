@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel General de Productos - Skiniverse</title>
+    <!-- Enlace al archivo CSS dentro de la carpeta assets/CSS -->
+    <link rel="stylesheet" href="../assets/CSS/EstiloAdmin.css">
+</head>
+<body>
+
+    <!-- Barra de Navegación Superior -->
+    <header class="navbar">
+        <div class="nav-brand">
+            <span>💧</span> Skiniverse
+        </div>
+        <ul class="nav-links">
+            <li><a href="PaginaPrincipal.html">Inicio</a></li>
+            <li><a href="#">Catálogo</a></li>
+            <li><a href="#">Privacidad</a></li>
+            <li><a href="#" style="font-weight: bold;">Administrar ▼</a></li>
+            <li><a href="#" class="cart-icon">🛒 0</a></li>
+            <li><button class="btn-logout">Cerrar Sesión</button></li>
+        </ul>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-container">
+        
+        <!-- Encabezado del Panel -->
+        <div class="admin-header">
+            <h1>Panel General de Productos</h1>
+            <div class="admin-actions">
+                <button class="btn-action">📦 Pedidos</button>
+                <button class="btn-action">👥 Usuarios</button>
+                <button class="btn-action btn-primary-custom">+ Agregar Nuevo Producto ▼</button>
+            </div>
+        </div>
+
+        <!-- Pestañas de Filtros -->
+        <div class="filter-tabs">
+            <button class="tab active">📌 Todos</button>
+            <button class="tab">🧴 Productos Propios</button>
+            <button class="tab">🏷️ Marcas Externas</button>
+        </div>
+
+        <!-- Tabla de Datos -->
+        <div class="table-container">
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Tipo de Piel</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <!-- Aquí puedes apuntar a tus imágenes de productos -->
+                            <img src="https://via.placeholder.com/35" alt="Limpiador" class="product-img">
+                        </td>
+                        <td>Limpiadores de espuma</td>
+                        <td>Limpiadores</td>
+                        <td>Todo tipo de piel</td>
+                        <td>$30.000</td>
+                        <td><span class="stock-badge">51 unidades</span></td>
+                        <td>
+                            <button class="btn-edit">✏️ Editar</button>
+                            <button class="btn-view">👁️ Ver</button>
+                            <button class="btn-delete">🗑️ Borrar</button>
+                        </td>
+                    </tr>
+                    <!-- Puedes duplicar más filas <tr> según necesites -->
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+</body>
+</html>
