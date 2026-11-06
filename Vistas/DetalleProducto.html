@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto - Skiniverse</title>
+    <link rel="stylesheet" href="../assets/CSS/EstiloAdmin.css">
+    <style>
+        .detail-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            align-items: center;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        .detail-img-container {
+            text-align: center;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .detail-img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+        .category-tag {
+            background-color: #334155;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .detail-info h2 {
+            color: #0f172a;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        .detail-info p {
+            margin-bottom: 12px;
+            font-size: 1rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+        .product-price {
+            color: #0284c7;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .btn-volver {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-volver:hover {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-brand" style="cursor: pointer;" onclick="location.href='AdminProductos.html'"><span>💧</span> Skiniverse</div>
+        <ul class="nav-links">
+            <li><a href="AdminProductos.html">📦 Volver al Panel</a></li>
+            <li><button class="btn-logout" onclick="location.href='Login.html'">Cerrar Sesión</button></li>
+        </ul>
+    </header>
+
+    <main class="main-container">
+        <div class="detail-card" id="cardDetalle">
+            <div class="detail-img-container">
+                <img id="imgProducto" src="https://via.placeholder.com/250" alt="Imagen del producto" class="detail-img">
+            </div>
+            <div class="detail-info">
+                <span class="category-tag" id="lblCategoria">Limpiadores</span>
+                <h2 id="lblNombre">Nombre del producto</h2>
+                <p><strong>Para:</strong> <span id="lblTipoPiel">Todo tipo de piel</span></p>
+                <p><strong>Activos:</strong> <span id="lblActivos">Espuma Facial limpiadora Cosmenatural Unisex...</span></p>
+                <div class="product-price" id="lblPrecio">$37</div>
+                <div>
+                    <a href="AdminProductos.html" class="btn-volver">Volver</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+            let producto = productos.find(p => p.id == id);
+
+            if (producto) {
+                document.getElementById('lblCategoria').innerText = producto.categoria || 'Limpiadores';
+                document.getElementById('lblNombre').innerText = producto.nombre || 'Sin nombre';
+                document.getElementById('lblTipoPiel').innerText = producto.tipoPiel || 'Todo tipo de piel';
+                document.getElementById('lblActivos').innerText = producto.activos || 'Producto especializado para el cuidado y bienestar de tu piel.';
+                document.getElementById('lblPrecio').innerText = `$${Number(producto.precio || 0).toLocaleString()}`;
+                
+                if (producto.imagen && producto.imagen.trim() !== "") {
+                    document.getElementById('imgProducto').src = producto.imagen;
+                } else {
+                    document.getElementById('imgProducto').src = 'https://via.placeholder.com/250';
+                }
+            } else {
+                document.getElementById('cardDetalle').innerHTML = `
+                    <div style="grid-column: span 2; text-align: center; padding: 40px;">
+                        <h2 style="color: #ef4444; margin-bottom: 15px;">Producto no encontrado</h2>
+                        <p style="margin-bottom: 20px; color: #64748b;">El producto que intentas visualizar no existe o fue eliminado.</p>
+                        <a href="AdminProductos.html" class="btn-volver">Volver al Panel</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

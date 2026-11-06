@@ -119,10 +119,15 @@
                     <input type="text" id="txtTipoPiel" required placeholder="Ej. Todo tipo de piel">
                 </div>
 
+                <div class="form-group-full">
+                    <label>Ingredientes Activos / Descripción</label>
+                    <textarea id="txtActivos" rows="3" placeholder="Ej. Espuma Facial limpiadora Cosmenatural Unisex..."></textarea>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group-full">
                         <label>Precio ($)</label>
-                        <input type="number" step="0.01" id="txtPrecio" required placeholder="36.95">
+                        <input type="number" step="0.01" id="txtPrecio" required placeholder="37">
                     </div>
                     <div class="form-group-full">
                         <label>Stock (Unidades)</label>
@@ -132,10 +137,10 @@
 
                 <div class="form-group-full">
                     <label>URL de la Imagen</label>
-                    <input type="text" id="txtImagen" placeholder="https://via.placeholder.com/35">
+                    <input type="text" id="txtImagen" placeholder="https://...">
                 </div>
 
-        
+            
 
                 <div class="form-footer">
                     <a href="AdminProductos.html" class="btn-cancelar">Cancelar</a>
@@ -160,10 +165,10 @@
                     document.getElementById("txtNombre").value = prod.nombre;
                     document.getElementById("txtCategoria").value = prod.categoria;
                     document.getElementById("txtTipoPiel").value = prod.tipoPiel;
+                    document.getElementById("txtActivos").value = prod.activos || '';
                     document.getElementById("txtPrecio").value = prod.precio;
                     document.getElementById("txtStock").value = prod.stock;
                     document.getElementById("txtImagen").value = prod.imagen;
-                
                 }
             } else {
                 document.getElementById("tituloEncabezado").innerText = "➕ Agregar Nuevo Producto";
@@ -177,29 +182,27 @@
             const nombre = document.getElementById("txtNombre").value;
             const categoria = document.getElementById("txtCategoria").value;
             const tipoPiel = document.getElementById("txtTipoPiel").value;
+            const activos = document.getElementById("txtActivos").value;
             const precio = parseFloat(document.getElementById("txtPrecio").value);
             const stock = parseInt(document.getElementById("txtStock").value);
             let imagen = document.getElementById("txtImagen").value.trim();
-            if (!imagen) imagen = 'https://via.placeholder.com/35';
+            if (!imagen) imagen = 'https://via.placeholder.com/250';
             
-            const esExterno = document.getElementById("chkMarcaExterna").checked;
-            const tipo = esExterno ? 'externos' : 'propios';
-
+        
             let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
 
             if (id) {
-                // Editar existente
                 let index = productos.findIndex(p => p.id == id);
                 if (index !== -1) {
-                    productos[index] = { id: parseInt(id), nombre, categoria, tipoPiel, precio, stock, imagen, tipo };
+                    productos[index] = { id: parseInt(id), nombre, categoria, tipoPiel, activos, precio, stock, imagen, tipo };
                 }
             } else {
-                // Crear nuevo
                 let nuevoProd = {
                     id: Date.now(),
                     nombre,
                     categoria,
                     tipoPiel,
+                    activos,
                     precio,
                     stock,
                     imagen,
