@@ -69,20 +69,6 @@
             display: inline-block;
             text-align: center;
         }
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 20px;
-        }
-        .checkbox-container input {
-            width: 18px;
-            height: 18px;
-        }
     </style>
 </head>
 <body>
@@ -101,37 +87,37 @@
                 ✏️ Editar Producto
             </div>
             
-            <form class="form-body" id="formGestion" onsubmit="guardarDatos(event)">
+            <div class="form-body">
                 <input type="hidden" id="prodId">
 
                 <div class="form-group-full">
                     <label>Nombre del Producto</label>
-                    <input type="text" id="txtNombre" required placeholder="Ej. Limpiadores de espuma">
+                    <input type="text" id="txtNombre" placeholder="Ej. Limpiadores de espuma">
                 </div>
 
                 <div class="form-group-full">
                     <label>Categoría</label>
-                    <input type="text" id="txtCategoria" required placeholder="Ej. Limpiadores">
+                    <input type="text" id="txtCategoria" placeholder="Ej. Limpiadores">
                 </div>
 
                 <div class="form-group-full">
                     <label>Tipo de Piel Recomendado</label>
-                    <input type="text" id="txtTipoPiel" required placeholder="Ej. Todo tipo de piel">
+                    <input type="text" id="txtTipoPiel" placeholder="Ej. Todo tipo de piel">
                 </div>
 
                 <div class="form-group-full">
                     <label>Ingredientes Activos / Descripción</label>
-                    <textarea id="txtActivos" rows="3" placeholder="Ej. Espuma Facial limpiadora Cosmenatural Unisex..."></textarea>
+                    <textarea id="txtActivos" rows="3" placeholder="Ej. Espuma Facial limpiadora..."></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group-full">
                         <label>Precio ($)</label>
-                        <input type="number" step="0.01" id="txtPrecio" required placeholder="37">
+                        <input type="number" step="0.01" id="txtPrecio" placeholder="37">
                     </div>
                     <div class="form-group-full">
                         <label>Stock (Unidades)</label>
-                        <input type="number" id="txtStock" required placeholder="51">
+                        <input type="number" id="txtStock" placeholder="51">
                     </div>
                 </div>
 
@@ -140,13 +126,11 @@
                     <input type="text" id="txtImagen" placeholder="https://...">
                 </div>
 
-            
-
                 <div class="form-footer">
                     <a href="AdminProductos.html" class="btn-cancelar">Cancelar</a>
-                    <button type="submit" class="btn-action btn-primary-custom" style="padding: 10px 22px; cursor: pointer;">💾 Guardar Cambios</button>
+                    <button type="button" class="btn-action btn-primary-custom" onclick="guardarDatos()" style="padding: 10px 22px; cursor: pointer;">💾 Guardar Cambios</button>
                 </div>
-            </form>
+            </div>
         </div>
     </main>
 
@@ -162,41 +146,58 @@
                 
                 if (prod) {
                     document.getElementById("prodId").value = prod.id;
-                    document.getElementById("txtNombre").value = prod.nombre;
-                    document.getElementById("txtCategoria").value = prod.categoria;
-                    document.getElementById("txtTipoPiel").value = prod.tipoPiel;
+                    document.getElementById("txtNombre").value = prod.nombre || '';
+                    document.getElementById("txtCategoria").value = prod.categoria || '';
+                    document.getElementById("txtTipoPiel").value = prod.tipoPiel || '';
                     document.getElementById("txtActivos").value = prod.activos || '';
-                    document.getElementById("txtPrecio").value = prod.precio;
-                    document.getElementById("txtStock").value = prod.stock;
-                    document.getElementById("txtImagen").value = prod.imagen;
+                    document.getElementById("txtPrecio").value = prod.precio || '';
+                    document.getElementById("txtStock").value = prod.stock || '';
+                    document.getElementById("txtImagen").value = prod.imagen || '';
                 }
             } else {
                 document.getElementById("tituloEncabezado").innerText = "➕ Agregar Nuevo Producto";
             }
         });
 
-        function guardarDatos(e) {
-            e.preventDefault();
+        function guardarDatos() {
+            const id = document.getElementById("prodId").value.trim();
+            const nombre = document.getElementById("txtNombre").value.trim();
+            const categoria = document.getElementById("txtCategoria").value.trim();
+            const tipoPiel = document.getElementById("txtTipoPiel").value.trim();
+            const activos = document.getElementById("txtActivos").value.trim();
+            const precio = parseFloat(document.getElementById("txtPrecio").value) || 0;
+            const stock = parseInt(document.getElementById("txtStock").value) || 0;
             
-            const id = document.getElementById("prodId").value;
-            const nombre = document.getElementById("txtNombre").value;
-            const categoria = document.getElementById("txtCategoria").value;
-            const tipoPiel = document.getElementById("txtTipoPiel").value;
-            const activos = document.getElementById("txtActivos").value;
-            const precio = parseFloat(document.getElementById("txtPrecio").value);
-            const stock = parseInt(document.getElementById("txtStock").value);
             let imagen = document.getElementById("txtImagen").value.trim();
-            if (!imagen) imagen = 'https://via.placeholder.com/250';
+            if (!imagen) {
+                imagen = 'https://via.placeholder.com/250';
+            }
             
-        
+            // Asignamos por defecto el tipo propio para mantener la compatibilidad del inventario
+            const tipo = 'propios';
+
             let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
 
-            if (id) {
+            if (id !== "") {
+                // Modo Edición
                 let index = productos.findIndex(p => p.id == id);
                 if (index !== -1) {
-                    productos[index] = { id: parseInt(id), nombre, categoria, tipoPiel, activos, precio, stock, imagen, tipo };
+                    productos[index] = { 
+                        id: Number(id), 
+                        nombre, 
+                        categoria, 
+                        tipoPiel, 
+                        activos, 
+                        precio, 
+                        stock, 
+                        imagen, 
+                        tipo 
+                    };
+                } else {
+                    productos.push({ id: Date.now(), nombre, categoria, tipoPiel, activos, precio, stock, imagen, tipo });
                 }
             } else {
+                // Modo Creación
                 let nuevoProd = {
                     id: Date.now(),
                     nombre,
@@ -211,8 +212,10 @@
                 productos.push(nuevoProd);
             }
 
+            // Guardar en el almacenamiento local
             localStorage.setItem('skiniverse_productos', JSON.stringify(productos));
-            alert("¡Producto guardado exitosamente!");
+            
+            alert("¡Cambios guardados exitosamente!");
             window.location.href = "AdminProductos.html";
         }
     </script>

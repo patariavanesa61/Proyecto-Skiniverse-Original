@@ -5,6 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel General de Productos - Skiniverse</title>
     <link rel="stylesheet" href="../assets/CSS/EstiloAdmin.css">
+    <style>
+        .admin-filters-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .btn-admin-todos {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #0284c7;
+            padding: 9px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-admin-todos:hover, .btn-admin-todos.active {
+            background-color: #0284c7;
+            color: white;
+            border-color: #0284c7;
+        }
+        .admin-select-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .admin-select-box select {
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            color: #334155;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            padding: 4px;
+        }
+    </style>
 </head>
 <body>
 
@@ -25,13 +73,23 @@
             <div class="admin-actions">
                 <button type="button" class="btn-action" onclick="verPedidos()">📦 Pedidos</button>
                 <button type="button" class="btn-action" onclick="verUsuarios()">👥 Usuarios</button>
-                <button type="button" class="btn-action btn-primary-custom" onclick="location.href='FormularioProducto.html'">+ Agregar Nuevo Producto ▼</button>
+                <button type="button" class="btn-action btn-primary-custom" onclick="location.href='FormularioProducto.html'">+ Agregar Nuevo Producto</button>
             </div>
         </div>
 
-        <div class="filter-tabs">
-            <button type="button" class="tab active" onclick="filtrar('todos', this)">📌 Todos</button>
-            <button type="button" class="tab" onclick="filtrar('propios', this)">🧴 Productos por  Categoria </button>
+        <!-- Filtros superiores idénticos a los del usuario -->
+        <div class="admin-filters-wrapper">
+            <button type="button" id="btnAdminTodos" class="btn-admin-todos active" onclick="seleccionarAdminTodos()">
+                📌 Todos
+            </button>
+            
+            <div class="admin-select-box">
+                <span>🧴</span>
+                <select id="selectAdminCategoria" onchange="seleccionarAdminCategoria()">
+                    <option value="" disabled selected>Productos por Categoria</option>
+                    <!-- Dinámico -->
+                </select>
+            </div>
         </div>
 
         <div class="table-container">
@@ -55,29 +113,61 @@
     </main>
 
     <script>
-        let filtroActual = 'todos';
+        let filtroAdminActual = 'todos'; // 'todos' o nombre de categoría
 
         document.addEventListener("DOMContentLoaded", () => {
-            // Inicializar datos por defecto si está vacío el localStorage
             if (!localStorage.getItem('skiniverse_productos')) {
                 const productosIniciales = [
-                    { id: 1, imagen: 'https://via.placeholder.com/35', nombre: 'Limpiadores de espuma', categoria: 'Limpiadores', tipoPiel: 'Todo tipo de piel', precio: 36.95, stock: 51, tipo: 'propios' },
-                    { id: 2, imagen: 'https://via.placeholder.com/35', nombre: 'Sérum de Ácido Hialurónico', categoria: 'Tratamientos', tipoPiel: 'Seca / Mixta', precio: 45.00, stock: 12, tipo: 'externos' }
+                    { id: 1, imagen: 'https://via.placeholder.com/35', nombre: 'Limpiadores de espuma', categoria: 'Limpiadores', tipoPiel: 'Todo tipo de piel', precio: 36.95, stock: 51 },
+                    { id: 2, imagen: 'https://via.placeholder.com/35', nombre: 'Sérum de Ácido Hialurónico', categoria: 'Tratamientos', tipoPiel: 'Seca / Mixta', precio: 45.00, stock: 12 }
                 ];
                 localStorage.setItem('skiniverse_productos', JSON.stringify(productosIniciales));
             }
+            poblarSelectorAdminCategorias();
             renderizarTabla();
         });
+
+        function poblarSelectorAdminCategorias() {
+            const select = document.getElementById('selectAdminCategoria');
+            let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+            
+            const categoriasUnicas = [...new Set(productos.map(p => p.categoria ? p.categoria.trim() : 'General'))];
+
+            let html = `<option value="" disabled selected>Productos por Categoria</option>`;
+            categoriasUnicas.forEach(cat => {
+                html += `<option value="${cat}">${cat}</option>`;
+            });
+
+            select.innerHTML = html;
+        }
+
+        function seleccionarAdminTodos() {
+            filtroAdminActual = 'todos';
+            document.getElementById('btnAdminTodos').classList.add('active');
+            document.getElementById('selectAdminCategoria').value = ""; // Resetea el select
+            renderizarTabla();
+        }
+
+        function seleccionarAdminCategoria() {
+            const select = document.getElementById('selectAdminCategoria');
+            filtroAdminActual = select.value;
+            document.getElementById('btnAdminTodos').classList.remove('active'); // Quita activo de Todos
+            renderizarTabla();
+        }
 
         function renderizarTabla() {
             const tbody = document.getElementById('tbodyProductos');
             tbody.innerHTML = '';
 
             let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
-            const filtrados = productos.filter(p => filtroActual === 'todos' || p.tipo === filtroActual);
+            
+            const filtrados = productos.filter(p => {
+                if (filtroAdminActual === 'todos') return true;
+                return (p.categoria && p.categoria.trim() === filtroAdminActual);
+            });
 
             if (filtrados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">No hay productos en esta categoría.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">No hay productos en esta vista.</td></tr>`;
                 return;
             }
 
@@ -86,7 +176,7 @@
                     <tr>
                         <td><img src="${p.imagen}" width="35" style="border-radius:4px; object-fit:cover;" alt="Img"></td>
                         <td><strong>${p.nombre}</strong></td>
-                        <td>${p.categoria}</td>
+                        <td>${p.categoria || 'General'}</td>
                         <td>${p.tipoPiel}</td>
                         <td>$${Number(p.precio).toFixed(2)}</td>
                         <td><span style="background:#10b981; color:white; padding:3px 8px; border-radius:10px; font-size:12px;">${p.stock} unidades</span></td>
@@ -100,24 +190,18 @@
             });
         }
 
-        function filtrar(tipo, elemento) {
-            filtroActual = tipo;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            elemento.classList.add('active');
-            renderizarTabla();
-        }
-
         function borrar(id) {
             if (confirm('¿Deseas eliminar este producto?')) {
                 let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
                 productos = productos.filter(x => x.id !== id);
                 localStorage.setItem('skiniverse_productos', JSON.stringify(productos));
+                poblarSelectorAdminCategorias();
                 renderizarTabla();
             }
         }
 
-        function irInicio() { window.location.href = "PaginaPrincipal.html"; }
-        function irCatalogo() { alert("Redirigiendo a Catálogo..."); }
+        function irInicio() { window.location.href = "CatalogoUsuario.html"; }
+        function irCatalogo() { window.location.href = "CatalogoUsuario.html"; }
         function irPrivacidad() { alert("Mostrando Políticas de Privacidad."); }
         function verPedidos() { window.location.href = "AdminPedidos.html"; }
         function verUsuarios() { window.location.href = "AdminUsuarios.html"; }
