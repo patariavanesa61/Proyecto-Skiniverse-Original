@@ -4,10 +4,16 @@
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 body {
-    background-color: #f4f8fb;
-    color: #333;
+    /* Capa blanca suave (0.75) para que tus tarjetas y textos sigan viéndose limpios y legibles */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), 
+                      url('https://img.magnific.com/vector-gratis/fondo-textura-acuarela-salpicaduras-abstractas_53876-155.jpg?sevat=ais_hybrid&w=740&q=80s');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
 }
 
 /* Navbar */
@@ -15,11 +21,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #6d3c11;
+    background: linear-gradient(135deg, #c6abe6 0%, #435a9b 40%, #e784b2 100%);
     padding: 15px 40px;
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://img.magnific.com/vector-gratis/fondo-galaxia-acuarela-creativa_79603-1387.jpg?semt=ais_hybrid&w=740&q=80');
 }
 
 .logo {
@@ -74,6 +82,7 @@ body {
 
 /* Carrusel Hero */
 .carousel-container {
+
     position: relative;
     width: 90%;
     max-width: 1200px;
@@ -312,13 +321,171 @@ footer {
     gap: 30px;
 }
 
+/*encontrat por categoria*/
 .section-header {
-    background: #E5F9E4;
+    background: linear-gradient(135deg, #dee4e9 0%, #a9d0f7 65%, #ccbdf5 100%);
+    color: #ffffff;
     border-radius: 15px;
-    padding: 20px;
+    padding: 25px 20px;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-bottom: 3px solid #f9c5fd;
+}
+
+/* Contenedor principal de la sección */
+.information-piel {
+    padding: 60px 20px;
+    background-color: #fdfbfb; /* Fondo suave */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 10px;
+}
+
+.section-subtitulo {
+    color: #718096;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+/* Contenedor que pone las tarjetas una al lado de la otra */
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px; /* Espacio entre tarjetas */
+    flex-wrap: wrap; /* Se acomodan hacia abajo en celulares */
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Diseño de cada tarjeta */
+.informacion-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 30px 25px;
+    width: 280px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    border-top: 5px solid #6b79f7; /* Detalle superior en tono piel/coral */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left;
+}
+
+/* Efecto al pasar el mouse por encima */
+.informacion-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Título dentro de la tarjeta */
+.informacion-card h3 {
+    color: #2d3748;
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* Texto dentro de la tarjeta */
+.informacion-card p {
+    color: #4a5568;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* --- ESTILOS DE TARJETAS GIRATORIAS 3D --- */
+.tarjeta-giratoria {
+    background-color: transparent;
+    width: 300px;
+    height: 350px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.tarjeta-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+}
+
+.tarjeta-giratoria:hover .tarjeta-inner {
+    transform: rotateY(180deg);
+}
+
+.tarjeta-front, .tarjeta-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tarjeta-front {
+    background-color: #ffffff;
+    color: #2d3748;
+    border-top: 6px solid #e29587;
+}
+
+.tarjeta-front h3 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    color: #2d3748;
+}
+
+.tarjeta-front p {
+    color: #4a5568;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.ver-mas {
+    display: block;
+    font-size: 0.85rem;
+    color: #e29587;
+    font-weight: 600;
+}
+
+.tarjeta-back {
+    background: linear-gradient(135deg, #e29587 0%, #d67a6b 100%);
+    color: white;
+    transform: rotateY(180deg);
+    justify-content: flex-start;
+}
+
+.tarjeta-back h3 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 8px;
+}
+
+.tarjeta-back p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.productos-section,
+.information-piel {
+    background-color: transparent !important;
 }
