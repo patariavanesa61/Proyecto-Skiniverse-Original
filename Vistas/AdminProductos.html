@@ -4,104 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Skiniverse - Gestión de Pedidos</title>
-    <style>
-        .header-skiniverse {
-            background-color: #261742;
-            border-bottom: 1px solid #48336d;
-            padding: 20px 3px;
-        }
-        .bg-skiniverse {
-            background-color: #48336d;
-            color: white;
-        }
-        .bg-skiniverse:hover {
-            background-color: #261742;
-            color: white;
-        }
-    </style>
+    <title>Panel General de Productos - Skiniverse</title>
+    <link rel="stylesheet" href="../assets/CSS/EstiloAdmin.css">
 </head>
+<body>
 
-<body class="bg-light">
+    <header class="navbar">
+        <div class="nav-brand" style="cursor: pointer;" onclick="irInicio()"><span>💧</span> Skiniverse</div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="irInicio()">Inicio</a></li>
+            <li><a href="#" onclick="irCatalogo()">Catálogo</a></li>
+            <li><a href="#" onclick="irPrivacidad()">Privacidad</a></li>
+            <li><a href="#" style="font-weight: bold;">Administrar ▼</a></li>
+            <li><button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button></li>
+        </ul>
+    </header>
 
-    <!-- ENCABEZADO SUPERIOR -->
-    <div class="header-skiniverse d-flex justify-content-between align-items-center px-4 text-white">
-        <h3><i class="bi bi-bag-heart"></i> SKINIVERSE - Panel de Pedidos</h3>
-        <div class="d-flex gap-2">
-            <a href="AdminProductos.html" class="btn btn-light btn-sm">
-                <i class="bi bi-arrow-left"></i> Volver a Productos
-            </a>
-        </div>
-    </div>
-
-    <div class="container py-5">
-
-        <!-- TARJETAS DE RESUMEN -->
-        <div class="row mb-4">
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm border-0 p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-muted small">Total de Pedidos</span>
-                            <h3 class="mb-0 fw-bold" id="totalPedidosCount">124</h3>
-                        </div>
-                        <i class="bi bi-box-seam fs-1 text-primary"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm border-0 p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-muted small">Pedidos Completados</span>
-                            <h3 class="mb-0 fw-bold text-success" id="completadosCount">89</h3>
-                        </div>
-                        <i class="bi bi-check-circle fs-1 text-success"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm border-0 p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-muted small">Pedidos Pendientes</span>
-                            <h3 class="mb-0 fw-bold text-warning" id="pendientesCount">18</h3>
-                        </div>
-                        <i class="bi bi-clock-history fs-1 text-warning"></i>
-                    </div>
-                </div>
+    <main class="main-container">
+        <div class="admin-header">
+            <h1>Panel General de Productos</h1>
+            <div class="admin-actions">
+                <button type="button" class="btn-action" onclick="verPedidos()">📦 Pedidos</button>
+                <button type="button" class="btn-action" onclick="verUsuarios()">👥 Usuarios</button>
+                <button type="button" class="btn-action btn-primary-custom" onclick="location.href='FormularioProducto.html'">+ Agregar Nuevo Producto ▼</button>
             </div>
         </div>
 
-        <!-- TARJETA PRINCIPAL DE LA TABLA DE PEDIDOS -->
-        <div class="card shadow p-4 border-0">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="mb-0" style="color: #261742;"><i class="bi bi-list-check"></i> Listado General de Pedidos</h4>
-                <button class="btn bg-skiniverse btn-sm" id="btnNuevoPedido" data-bs-toggle="modal" data-bs-target="#modalPedido">
-                    <i class="bi bi-plus-circle"></i> Registrar Pedido
-                </button>
-            </div>
-
-            <!-- FILTROS Y BUSCADOR -->
-            <div class="row mb-3">
-                <div class="col-md-8 mb-2">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" id="buscarPedido" placeholder="Buscar por N.° de pedido o cliente...">
-                    </div>
-                </div>
-                <div class="col-md-4 mb-2">
-                    <select class="form-select" id="filtroEstado">
-                        <option value="Todos">Todos los estados</option>
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="En proceso">En proceso</option>
-                        <option value="Completado">Completado</option>
-                        <option value="Cancelado">Cancelado</option>
-                    </select>
-                </div>
-            </div>
+        <div class="filter-tabs">
+            <button type="button" class="tab active" onclick="filtrar('todos', this)">📌 Todos</button>
+            <button type="button" class="tab" onclick="filtrar('propios', this)">🧴 Productos por  Categoria </button>
+        </div>
 
             <!-- TABLA DE PEDIDOS -->
             <div class="table-responsive">
@@ -147,10 +79,78 @@
         </div>
     </div>
 
-    <!-- MODAL PARA REGISTRAR / EDITAR PEDIDO -->
-    <div class="modal fade" id="modalPedido" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header text-white" style="background-color: #261742;">
-                    <h5 class="modal-title"><i class="bi bi-bag-plus"></i> Gestionar Pedido</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="
+    <script>
+        let filtroActual = 'todos';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Inicializar datos por defecto si está vacío el localStorage
+            if (!localStorage.getItem('skiniverse_productos')) {
+                const productosIniciales = [
+                    { id: 1, imagen: 'https://via.placeholder.com/35', nombre: 'Limpiadores de espuma', categoria: 'Limpiadores', tipoPiel: 'Todo tipo de piel', precio: 36.95, stock: 51, tipo: 'propios' },
+                    { id: 2, imagen: 'https://via.placeholder.com/35', nombre: 'Sérum de Ácido Hialurónico', categoria: 'Tratamientos', tipoPiel: 'Seca / Mixta', precio: 45.00, stock: 12, tipo: 'externos' }
+                ];
+                localStorage.setItem('skiniverse_productos', JSON.stringify(productosIniciales));
+            }
+            renderizarTabla();
+        });
+
+        function renderizarTabla() {
+            const tbody = document.getElementById('tbodyProductos');
+            tbody.innerHTML = '';
+
+            let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+            const filtrados = productos.filter(p => filtroActual === 'todos' || p.tipo === filtroActual);
+
+            if (filtrados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">No hay productos en esta categoría.</td></tr>`;
+                return;
+            }
+
+            filtrados.forEach(p => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${p.imagen}" width="35" style="border-radius:4px; object-fit:cover;" alt="Img"></td>
+                        <td><strong>${p.nombre}</strong></td>
+                        <td>${p.categoria}</td>
+                        <td>${p.tipoPiel}</td>
+                        <td>$${Number(p.precio).toFixed(2)}</td>
+                        <td><span style="background:#10b981; color:white; padding:3px 8px; border-radius:10px; font-size:12px;">${p.stock} unidades</span></td>
+                        <td>
+                            <button type="button" onclick="location.href='FormularioProducto.html?id=${p.id}'" style="padding:4px 8px; background:#f1f5f9; border:1px solid #cbd5e1; cursor:pointer; border-radius:4px;">✏️ Editar</button>
+                            <button type="button" onclick="location.href='DetalleProducto.html?id=${p.id}'" style="padding:4px 8px; background:#e0f2fe; border:1px solid #bae6fd; cursor:pointer; border-radius:4px;">👁️ Ver</button>
+                            <button type="button" onclick="borrar(${p.id})" style="padding:4px 8px; background:#fee2e2; border:1px solid #fecaca; cursor:pointer; border-radius:4px;">🗑️ Borrar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function filtrar(tipo, elemento) {
+            filtroActual = tipo;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            elemento.classList.add('active');
+            renderizarTabla();
+        }
+
+        function borrar(id) {
+            if (confirm('¿Deseas eliminar este producto?')) {
+                let productos = JSON.parse(localStorage.getItem('skiniverse_productos')) || [];
+                productos = productos.filter(x => x.id !== id);
+                localStorage.setItem('skiniverse_productos', JSON.stringify(productos));
+                renderizarTabla();
+            }
+        }
+
+        function irInicio() { window.location.href = "PaginaPrincipal.html"; }
+        function irCatalogo() { alert("Redirigiendo a Catálogo..."); }
+        function irPrivacidad() { alert("Mostrando Políticas de Privacidad."); }
+        function verPedidos() { window.location.href = "AdminPedidos.html"; }
+        function verUsuarios() { window.location.href = "AdminUsuarios.html"; }
+        function cerrarSesion() {
+            if (confirm("¿Cerrar sesión?")) {
+                window.location.href = "Login.html";
+            }
+        }
+    </script>
+</body>
+</html>
